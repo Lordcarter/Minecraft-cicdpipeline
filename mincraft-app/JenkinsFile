@@ -62,24 +62,24 @@ pipeline {
       steps {
         // sh 'ls -ltr'
         // builds the project and create a JAR file
-        sh 'cd spring-boot-app && mvn -U clean package'
+        sh 'cd mincraft-app && mvn -U clean package'
       }
       
     }
     
     stage('Unit Test') {
          steps {
-             sh 'cd spring-boot-app && mvn test'
+             sh 'cd mincraft-app && mvn test'
          }
        }
     stage('Integration Test') {
         steps {
-            sh 'cd spring-boot-app && mvn verify -DskipUnitTests'
+            sh 'cd mincraft-app && mvn verify -DskipUnitTests'
         }
     }
     stage('Checkstyle Code Analysis') {
         steps {
-            sh 'cd spring-boot-app && mvn checkstyle:checkstyle'
+            sh 'cd mincraft-app && mvn checkstyle:checkstyle'
         }
         post {
             success {
@@ -93,7 +93,7 @@ pipeline {
       }
       steps {
         withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_AUTH_TOKEN')]) {
-          sh 'cd spring-boot-app && mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}'
+          sh 'cd mincraft-app && mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}'
         }
       }
     }
@@ -104,7 +104,7 @@ pipeline {
            sh "sed -i \"s/.*<username><\\/username>/<username>$USER_NAME<\\/username>/g\" ${WORKSPACE}/nexus-setup/settings.xml"
            sh "sed -i \"s/.*<password><\\/password>/<password>$PASSWORD<\\/password>/g\" ${WORKSPACE}/nexus-setup/settings.xml"
            sh 'sudo cp ${WORKSPACE}/nexus-setup/settings.xml /var/lib/jenkins/.m2'
-           sh 'cd spring-boot-app && mvn clean deploy -DskipTests'
+           sh 'cd mincraft-app && mvn clean deploy -DskipTests'
            }
           
        }
@@ -139,7 +139,7 @@ pipeline {
             // sh "sudo systemctl  enable docker"
             // sh "sudo usermod -a -G docker jenkins"
             // Build the Docker image
-            sh "cd spring-boot-app && docker build -t ${repositoryName}:${dockerImageTag} ."
+            sh "cd mincraft-app && docker build -t ${repositoryName}:${dockerImageTag} ."
 
             // Authenticate and push the Docker image to ECR
                 sh "aws ecr get-login-password --region ${region} | docker login --username AWS --password-stdin ${ecrRegistry}"
