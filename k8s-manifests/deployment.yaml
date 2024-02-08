@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: spring-boot-app
+  name: mincraft-app
   labels:
-    app: spring-boot-app
+    app: mincraft-app
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: spring-boot-app
+      app: mincraft-app
   template:
     metadata:
       labels:
-        app: spring-boot-app
+        app: mincraft-app
     spec:
       containers:
-      - name: spring-boot-app
+      - name: mincraft-app
         image: 849277819322.dkr.ecr.ca-central-1.amazonaws.com/jjtech-demo:replaceImageTag
         ports:
         - containerPort: 8080
